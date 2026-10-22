@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Token warna: light + dark berasal dari prefers-color-scheme.
+  Catatan kontras (WCAG AA, teks normal >= 4.5:1):
+  - light: ink/bg 16.7 : muted/bg 6.1 : blue/bg 4.6 : white di atas blue 4.9
+  - dark : ink/bg 16.7 : muted/bg 8.0 : blue/bg 7.5
+  - sky di light hanya 2.5:1 -> dekoratif saja, JANGAN untuk teks.
+*/
+:root {
+  --ink: #16181d;
+  --blue: #1c6fd6;
+  --sky: #2aa7e6;
+  --bg: #f5f8fc;
+  --mist: #e4edf8;
+  --line: #d5e0ee;
+  --muted: #555f6e;
+  --surface: #ffffff;
+  /* warna teks di atas --blue: putih di mode terang, gelap di mode gelap */
+  --on-blue: #ffffff;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #e9eff7;
+    --blue: #5aa6f0;
+    --sky: #6cc8f5;
+    --bg: #0b0e13;
+    --mist: #12171f;
+    --line: #26303d;
+    --muted: #9ba8b9;
+    --surface: #11161d;
+    --on-blue: #0b0e13;
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg font-body text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading font-bold italic;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--blue);
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .measure {
+    @apply max-w-prose;
+  }
+
+  .card {
+    @apply rounded-lg border border-line bg-surface;
+  }
+
+  .muted {
+    @apply text-muted;
+  }
+
+  .hairline {
+    @apply border-t border-line;
+  }
+
+  .skip-link {
+    @apply sr-only;
+  }
+
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-50 rounded bg-surface px-4 py-2 text-sm font-semibold shadow;
+  }
+}
+
+/* Satu-satunya animasi dekoratif: orbit di hero. */
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.orbit-spin {
+  animation: orbit-spin 40s linear infinite;
+  transform-origin: center;
+}
+
+.orbit-spin-slow {
+  animation: orbit-spin 70s linear infinite reverse;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .orbit-spin,
+  .orbit-spin-slow {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
